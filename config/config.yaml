@@ -1,0 +1,81 @@
+# 自动化信息收集系统配置文件
+# CUDA & HPC资源收集器
+
+# 搜索配置
+search:
+  # 中文搜索关键词
+  keywords_zh:
+    - "CUDA编程教程"
+    - "CUDA编程入门"
+    - "GPU并行计算"
+    - "高性能计算HPC"
+    - "CUDA优化技巧"
+    - "NVIDIA GPU编程"
+    - "CUDA深度学习"
+    - "GPU加速计算"
+    - "并行算法实现"
+    - "CUDA最佳实践"
+
+  # 英文搜索关键词
+  keywords_en:
+    - "CUDA programming tutorial"
+    - "CUDA getting started"
+    - "GPU parallel computing"
+    - "HPC high performance computing"
+    - "CUDA optimization guide"
+    - "NVIDIA GPU development"
+    - "CUDA deep learning"
+    - "GPU acceleration"
+    - "parallel algorithms"
+    - "CUDA best practices"
+    - "CUDA by example"
+    - "Professional CUDA C Programming"
+
+  # 搜索源配置
+  sources:
+    duckduckgo:
+      enabled: true
+      max_results: 30    # 每个关键词的最大结果数
+
+    github:
+      enabled: true
+      min_stars: 10      # 最小星标数
+      max_results: 20    # 每个关键词的最大结果数
+
+  # 搜索延迟（避免被封禁）
+  delay_seconds: 1
+
+# 输出配置
+output:
+  path: "resources"                           # 输出目录
+  excel_file: "cuda_hpc_resources.xlsx"      # Excel文件名
+  csv_backup: true                           # 是否保存CSV备份
+  auto_open: false                           # 是否自动打开结果文件
+
+# 过滤器配置
+filters:
+  min_quality_score: 3.0    # 最小质量评分（1-5）
+  languages:                # 接受的语言类型
+    - "zh"                  # 中文
+    - "en"                  # 英文
+    - "mixed"               # 双语
+  resource_types:           # 接受的资源类型
+    - "book"
+    - "course"
+    - "blog"
+    - "code"
+    - "documentation"
+
+# 高级配置
+advanced:
+  enable_proxy: false       # 是否使用代理
+  proxy_url: ""             # 代理地址
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  timeout: 30               # 请求超时时间（秒）
+  max_retries: 3            # 最大重试次数
+
+# 日志配置
+logging:
+  level: "INFO"             # 日志级别: DEBUG, INFO, WARNING, ERROR
+  file: "collector.log"     # 日志文件名
+  console: true             # 是否输出到控制台
