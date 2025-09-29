@@ -1,3 +1,5 @@
+**中文** | [English](README-EN.md)
+
 # 自动化信息收集系统（CUDA & HPC 资源收集器）
 
 自动化信息收集系统用于批量发现、筛选和整理 CUDA 及高性能计算（HPC）相关的高质量学习资源。项目会从 DuckDuckGo 搜索结果与 GitHub 热门仓库中抓取候选链接，结合多维度评分与分类策略，最终将结果导出为结构化的 Excel/CSV 文件，方便学习与分享。
@@ -102,6 +104,9 @@ python -m src.main search --config config/custom.yaml
 - ✅ 已实现自动去重、评分、推荐语生成逻辑。
 - 🚧 计划增强增量更新、代理支持与更多数据源（如 ArXiv、Kaggle Dataset）。
 - 🧪 欢迎补充测试样例或将评分策略扩展到更多维度（如使用自然语言模型进行算分）。
+
+## 📄 许可证
+项目采用 MIT License 发布，具体条款见根目录下的 `LICENSE` 文件。
 
 ## ❓ 常见问题
 - **GitHub API 速率受限？** 未配置令牌的公共请求有严格限流，可在环境变量 `GITHUB_TOKEN` 中设置个人令牌并在代码中拓展支持。
