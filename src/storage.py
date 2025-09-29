@@ -13,6 +13,24 @@ logger = logging.getLogger(__name__)
 class ResourceStorage:
     """资源存储类"""
 
+    COLUMN_MAPPING = {
+        'title': '资源名称',
+        'url': '链接地址',
+        'type': '类型',
+        'language_detected': '语言',
+        'source': '来源平台',
+        'quality_score': '质量评分',
+        'recommendation': '推荐理由',
+        'description': '描述',
+        'stars': '星标数',
+        'language': '编程语言',
+        'updated_at': '更新时间',
+        'collected_at': '收集时间',
+        'keyword': '搜索关键词'
+    }
+
+    REVERSE_COLUMN_MAPPING = {v: k for k, v in COLUMN_MAPPING.items()}
+
     def __init__(self, output_dir: str = "resources"):
         """
         初始化存储管理器
@@ -130,26 +148,10 @@ class ResourceStorage:
         df = pd.DataFrame(resources)
 
         # 列顺序和中文列名映射
-        column_mapping = {
-            'title': '资源名称',
-            'url': '链接地址',
-            'type': '类型',
-            'language_detected': '语言',
-            'source': '来源平台',
-            'quality_score': '质量评分',
-            'recommendation': '推荐理由',
-            'description': '描述',
-            'stars': '星标数',
-            'language': '编程语言',
-            'updated_at': '更新时间',
-            'collected_at': '收集时间',
-            'keyword': '搜索关键词'
-        }
-
         # 选择存在的列并重命名
-        existing_columns = [col for col in column_mapping.keys() if col in df.columns]
+        existing_columns = [col for col in self.COLUMN_MAPPING.keys() if col in df.columns]
         df = df[existing_columns]
-        df = df.rename(columns=column_mapping)
+        df = df.rename(columns=self.COLUMN_MAPPING)
 
         # 写入工作表
         df.to_excel(writer, sheet_name=sheet_name, index=False)
@@ -160,6 +162,22 @@ class ResourceStorage:
             length = max(len(str(cell.value)) for cell in column_cells if cell.value)
             length = min(length, 50)  # 限制最大列宽
             worksheet.column_dimensions[column_cells[0].column_letter].width = length + 2
+
+    def _normalize_dataframe_columns(self, df: pd.DataFrame) -> pd.DataFrame:
+        """将DataFrame列名转换为内部统一使用的英文键"""
+        if df.empty:
+            return df
+
+        rename_map = {
+            column_name: self.REVERSE_COLUMN_MAPPING[column_name]
+            for column_name in df.columns
+            if column_name in self.REVERSE_COLUMN_MAPPING
+        }
+
+        if rename_map:
+            df = df.rename(columns=rename_map)
+
+        return df
 
     def _translate_category(self, category: str) -> str:
         """
@@ -258,6 +276,8 @@ class ResourceStorage:
             else:
                 logger.error(f"不支持的文件格式: {filename}")
                 return []
+
+            df = self._normalize_dataframe_columns(df)
 
             # 转换回字典列表
             resources = df.to_dict('records')
