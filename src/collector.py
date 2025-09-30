@@ -24,7 +24,12 @@ class ResourceCollector:
             config: 配置字典
         """
         self.config = config or {}
-        self.ddgs = DDGS()
+        try:
+            self.ddgs = DDGS()
+            logger.info("DuckDuckGo 搜索引擎初始化成功")
+        except Exception as e:
+            logger.error(f"DuckDuckGo 搜索引擎初始化失败: {e}")
+            self.ddgs = None
         self.collected_resources = []
 
     def search_duckduckgo(self, keywords: List[str], max_results: int = 50) -> List[Dict[str, Any]]:
@@ -39,19 +44,38 @@ class ResourceCollector:
             搜索结果列表
         """
         results = []
+        
+        # 检查 DuckDuckGo 是否初始化成功
+        if self.ddgs is None:
+            logger.warning("DuckDuckGo 搜索引擎未初始化,跳过搜索")
+            return results
 
+        logger.info(f"开始 DuckDuckGo 搜索,关键词数量: {len(keywords)}, 每个关键词最多 {max_results} 条结果")
+        
         for keyword in tqdm(keywords, desc="DuckDuckGo搜索"):
             try:
+                logger.debug(f"搜索关键词: {keyword}")
                 # 执行搜索
                 search_results = list(self.ddgs.text(
                     query=keyword,
                     max_results=max_results
                 ))
+                
+                logger.info(f"关键词 '{keyword}' 返回 {len(search_results)} 条结果")
 
                 for result in search_results:
+                    # ddgs 可能返回 'href' 或 'link' 作为 URL 字段
+                    url = result.get('href') or result.get('link') or result.get('url', '')
+                    
+                    # 跳过没有 URL 的结果
+                    if not url:
+                        logger.warning(f"跳过无 URL 的结果: {result.get('title', 'Unknown')}")
+                        logger.debug(f"结果详情: {result}")
+                        continue
+                    
                     resource = {
                         'title': result.get('title', ''),
-                        'url': result.get('link', ''),
+                        'url': url,
                         'description': result.get('body', ''),
                         'source': 'DuckDuckGo',
                         'keyword': keyword
@@ -62,9 +86,10 @@ class ResourceCollector:
                 time.sleep(1)
 
             except Exception as e:
-                logger.error(f"DuckDuckGo搜索错误 ({keyword}): {e}")
+                logger.error(f"DuckDuckGo搜索错误 ({keyword}): {e}", exc_info=True)
                 continue
 
+        logger.info(f"DuckDuckGo 搜索完成,共获得 {len(results)} 条结果")
         return results
 
     def search_github(self, keywords: List[str], min_stars: int = 10) -> List[Dict[str, Any]]:
@@ -154,25 +179,46 @@ class ResourceCollector:
                 "CUDA optimization guide"
             ]
 
+        # 从配置读取源设置
+        sources_config = self.config.get('sources', {})
+        
         # DuckDuckGo搜索
-        logger.info("开始DuckDuckGo搜索...")
-        ddg_results = self.search_duckduckgo(
-            keywords_zh + keywords_en,
-            max_results=self.config.get('max_results', 30)
-        )
-        all_resources.extend(ddg_results)
+        ddg_config = sources_config.get('duckduckgo', {})
+        if ddg_config.get('enabled', True):
+            logger.info("=" * 50)
+            logger.info("开始 DuckDuckGo 搜索...")
+            logger.info("=" * 50)
+            ddg_max_results = ddg_config.get('max_results', 30)
+            ddg_results = self.search_duckduckgo(
+                keywords_zh + keywords_en,
+                max_results=ddg_max_results
+            )
+            all_resources.extend(ddg_results)
+            logger.info(f"DuckDuckGo 搜索完成: 获得 {len(ddg_results)} 个资源")
+        else:
+            logger.info("DuckDuckGo 搜索已禁用")
 
         # GitHub搜索
-        logger.info("开始GitHub搜索...")
-        github_results = self.search_github(
-            keywords_en,  # GitHub主要使用英文
-            min_stars=self.config.get('min_stars', 10)
-        )
-        all_resources.extend(github_results)
+        github_config = sources_config.get('github', {})
+        if github_config.get('enabled', True):
+            logger.info("=" * 50)
+            logger.info("开始 GitHub 搜索...")
+            logger.info("=" * 50)
+            github_min_stars = github_config.get('min_stars', 10)
+            github_results = self.search_github(
+                keywords_en,  # GitHub主要使用英文
+                min_stars=github_min_stars
+            )
+            all_resources.extend(github_results)
+            logger.info(f"GitHub 搜索完成: 获得 {len(github_results)} 个资源")
+        else:
+            logger.info("GitHub 搜索已禁用")
 
         # 保存结果
         self.collected_resources = all_resources
-        logger.info(f"总共收集到 {len(all_resources)} 个资源")
+        logger.info("=" * 50)
+        logger.info(f"总共收集到 {len(all_resources)} 个资源 (DuckDuckGo: {len(ddg_results) if ddg_config.get('enabled', True) else 0}, GitHub: {len(github_results) if github_config.get('enabled', True) else 0})")
+        logger.info("=" * 50)
 
         return all_resources
 
