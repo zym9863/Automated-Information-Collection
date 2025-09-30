@@ -70,8 +70,8 @@ class ResourceParser:
         Returns:
             语言标识 (zh/en/mixed)
         """
-        title = resource.get('title', '')
-        description = resource.get('description', '')
+        title = resource.get('title') or ''
+        description = resource.get('description') or ''
         combined_text = f"{title} {description}"
 
         # 检测中文字符
@@ -134,10 +134,10 @@ class ResourceParser:
             score += 1.0
 
         # 描述完整度加分
-        description = resource.get('description', '')
-        if len(description) > 100:
+        description = resource.get('description') or ''
+        if description and len(description) > 100:
             score += 0.3
-        if len(description) > 200:
+        if description and len(description) > 200:
             score += 0.2
 
         # 确保分数在1-5范围内

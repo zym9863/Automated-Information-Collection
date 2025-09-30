@@ -159,7 +159,10 @@ class ResourceStorage:
         # 获取工作表并调整列宽
         worksheet = writer.sheets[sheet_name]
         for column_cells in worksheet.columns:
-            length = max(len(str(cell.value)) for cell in column_cells if cell.value)
+            # 获取所有非空单元格的长度
+            lengths = [len(str(cell.value)) for cell in column_cells if cell.value is not None]
+            # 如果有非空单元格,使用最大长度;否则使用默认值10
+            length = max(lengths) if lengths else 10
             length = min(length, 50)  # 限制最大列宽
             worksheet.column_dimensions[column_cells[0].column_letter].width = length + 2
 
