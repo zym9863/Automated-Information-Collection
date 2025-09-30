@@ -103,7 +103,16 @@ class AutomatedInfoCollector:
             },
             'filters': {
                 'min_quality_score': 3.0,
-                'resource_types': ['book', 'course', 'blog', 'code', 'documentation']
+                'resource_types': [
+                    'website',
+                    'blog',
+                    'code',
+                    'forum',
+                    'course_notes',
+                    'book',
+                    'exam',
+                    'technical_whitepaper'
+                ]
             }
         }
 

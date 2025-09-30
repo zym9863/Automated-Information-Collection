@@ -6,7 +6,7 @@ The Automated Information Collection System is designed to batch discover, filte
 
 ## ✨ Key Features
 - **Multi-source search**: Leverages both DuckDuckGo and the GitHub API, supporting extended keywords in Chinese and English.
-- **Automatic categorization**: Identifies books, courses, blogs, codebases, documentation, and more based on titles, descriptions, and URL patterns.
+- **Automatic categorization**: Identifies websites, blogs, codebases, forums, course notes/lectures, publicly accessible books, exams, and technical/white papers based on titles, descriptions, and URL patterns.
 - **Quality assessment**: Combines metrics such as GitHub stars, last update time, official site domains, and description completeness to generate a quality score from 1 to 5.
 - **Recommendation snippets**: Produces readable recommendation sentences for high-quality resources that highlight their strengths.
 - **Data export**: Outputs categorized Excel files (one sheet per type) plus UTF-8 encoded CSV backups for direct sharing or downstream processing.
@@ -95,7 +95,7 @@ python -m src.main search --config config/custom.yaml
 By default, the following files are generated under `resources/`:
 - `cuda_hpc_resources.xlsx`:
   - `All Resources`: Complete result set (includes quality scores, recommendation notes, search keywords, etc.).
-  - `Books / Courses / Blogs / Code / Docs`: Separate sheets generated only when the category contains data.
+  - `Websites / Blogs / Code / Forums / Course Notes / Books / Exams / Technical Whitepapers`: Separate sheets generated only when the category contains data.
   - `Statistics`: Summary metrics such as counts, language distribution, source distribution, and score statistics.
   - `Top20 Resources`: The 20 highest-scoring resources in descending order.
 - `cuda_hpc_resources.csv`: UTF-8 (with BOM) encoded backup ready for Excel or notebooks.

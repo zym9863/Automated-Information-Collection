@@ -193,11 +193,14 @@ class ResourceStorage:
             中文分类名
         """
         translations = {
-            'book': '书籍',
-            'course': '课程',
+            'website': '网站',
             'blog': '博客',
             'code': '代码',
-            'documentation': '文档',
+            'forum': '论坛',
+            'course_notes': '课程笔记讲座',
+            'book': '公开书籍',
+            'exam': '考试',
+            'technical_whitepaper': '技术白皮书',
             'other': '其他'
         }
         return translations.get(category, category)
@@ -330,7 +333,7 @@ if __name__ == "__main__":
         {
             'title': 'CUDA Programming Guide',
             'url': 'https://docs.nvidia.com/cuda/',
-            'type': 'documentation',
+            'type': 'website',
             'language_detected': 'en',
             'source': 'DuckDuckGo',
             'quality_score': 4.5,
@@ -341,7 +344,7 @@ if __name__ == "__main__":
         {
             'title': 'CUDA编程入门',
             'url': 'https://example.com/cuda-tutorial',
-            'type': 'course',
+            'type': 'course_notes',
             'language_detected': 'zh',
             'source': 'DuckDuckGo',
             'quality_score': 4.0,

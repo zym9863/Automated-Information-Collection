@@ -16,11 +16,17 @@ class ResourceParser:
         """初始化解析器"""
         # 资源类型关键词映射
         self.type_keywords = {
-            'book': ['book', 'pdf', '书', '教材', 'guide', 'handbook', 'manual'],
-            'course': ['course', 'tutorial', 'lesson', '课程', '教程', 'class', 'lecture'],
-            'blog': ['blog', 'article', 'post', '博客', '文章', 'medium.com'],
+            'website': [
+                'website', 'official', 'portal', 'site', '主页', '官网', 'resource center', 'landing page',
+                'developer.nvidia.com', 'docs.nvidia.com'
+            ],
+            'blog': ['blog', 'article', 'post', '博客', '文章', 'medium.com', 'devblog'],
             'code': ['github', 'gitlab', 'code', 'repository', 'repo', '代码', 'example', 'demo'],
-            'documentation': ['docs', 'documentation', 'api', 'reference', '文档', 'nvidia.com/docs']
+            'forum': ['forum', '社区', '讨论', 'bbs', 'stack overflow', 'stackoverflow', 'discuss'],
+            'course_notes': ['笔记', 'note', 'lecture', 'slides', '讲义', '课件', '课堂', '课程笔记', '课程讲义'],
+            'book': ['book', 'pdf', '书', '教材', 'guide', 'handbook', 'manual', 'ebook'],
+            'exam': ['exam', '考试', '题库', 'quiz', '练习', '习题', 'past paper', 'sample question', 'test'],
+            'technical_whitepaper': ['whitepaper', 'white paper', '技术报告', 'report', '研究报告', 'analysis', 'technical paper', 'specification']
         }
 
         # 语言检测模式
@@ -54,6 +60,14 @@ class ResourceParser:
             type_scores['code'] += 3
         if '.pdf' in url:
             type_scores['book'] += 2
+        if 'forum' in url or 'stackexchange' in url or 'stackoverflow' in url:
+            type_scores['forum'] += 2
+        if 'slideshare' in url or 'lecture' in url:
+            type_scores['course_notes'] += 2
+        if 'arxiv.org' in url or 'whitepaper' in url:
+            type_scores['technical_whitepaper'] += 2
+        if any(domain in url for domain in ['.edu', 'university']):
+            type_scores['course_notes'] += 1
 
         # 返回得分最高的类型
         if max(type_scores.values()) > 0:
@@ -157,16 +171,19 @@ class ResourceParser:
 
         # 基于类型的推荐
         resource_type = resource.get('type', '')
-        if resource_type == 'book':
-            reasons.append("系统学习的好材料")
-        elif resource_type == 'course':
-            reasons.append("结构化的学习路径")
-        elif resource_type == 'code':
-            reasons.append("包含实践代码示例")
-        elif resource_type == 'documentation':
-            reasons.append("官方权威参考")
-        elif resource_type == 'blog':
-            reasons.append("实战经验分享")
+        type_reasons = {
+            'website': "权威在线资源入口",
+            'blog': "实战经验分享",
+            'code': "包含实践代码示例",
+            'forum': "社区讨论活跃",
+            'course_notes': "来自课程笔记或讲座资料",
+            'book': "系统学习的公开书籍",
+            'exam': "用于自测的练习题库",
+            'technical_whitepaper': "深入的技术/白皮书分析"
+        }
+        reason = type_reasons.get(resource_type)
+        if reason:
+            reasons.append(reason)
 
         # 基于评分的推荐
         score = resource.get('quality_score', 0)
@@ -247,11 +264,14 @@ class ResourceParser:
             分类后的资源字典
         """
         categorized = {
-            'book': [],
-            'course': [],
+            'website': [],
             'blog': [],
             'code': [],
-            'documentation': [],
+            'forum': [],
+            'course_notes': [],
+            'book': [],
+            'exam': [],
+            'technical_whitepaper': [],
             'other': []
         }
 

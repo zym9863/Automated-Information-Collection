@@ -60,11 +60,14 @@ filters:
     - "en"                  # 英文
     - "mixed"               # 双语
   resource_types:           # 接受的资源类型
-    - "book"
-    - "course"
+    - "website"
     - "blog"
     - "code"
-    - "documentation"
+    - "forum"
+    - "course_notes"
+    - "book"
+    - "exam"
+    - "technical_whitepaper"
 
 # 高级配置
 advanced:
