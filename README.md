@@ -1,8 +1,8 @@
 **中文** | [English](README-EN.md)
 
-# 自动化信息收集系统（CUDA & HPC 资源收集器）
+# 自动化信息收集系统（FlashAttention & 深度推理加速资源）
 
-自动化信息收集系统用于批量发现、筛选和整理 CUDA 及高性能计算（HPC）相关的高质量学习资源。项目会从 DuckDuckGo 搜索结果与 GitHub 热门仓库中抓取候选链接，结合多维度评分与分类策略，最终将结果导出为结构化的 Excel/CSV 文件，方便学习与分享。
+自动化信息收集系统用于批量发现、筛选和整理 FlashAttention、DeepSeek Flash MLA、DeepGEMM、Deep EP 等深度学习推理加速相关的高质量资源。项目会从 DuckDuckGo 搜索结果与 GitHub 热门仓库中抓取候选链接，结合多维度评分与分类策略，最终将结果导出为结构化的 Excel/CSV 文件，方便学习与分享。
 
 ## ✨ 功能特性
 - **多源搜索**：同时使用 DuckDuckGo 与 GitHub API，支持中英文关键词扩展。
@@ -72,7 +72,7 @@ pip install -e .
   ```
   可通过 `--keywords` 追加额外英文关键词，例如：
   ```cmd
-  python -m src.main search --keywords "GPU acceleration" "parallel training"
+  python -m src.main search --keywords "flash attention" "inference acceleration"
   ```
 
 - **查看 Excel 统计信息：**
@@ -82,7 +82,7 @@ pip install -e .
 
 - **尝试增量更新（开发中）：**
   ```cmd
-  python -m src.main update --file cuda_hpc_resources.xlsx
+  python -m src.main update --file flash_attention_resources.xlsx
   ```
   > 当前增量合并逻辑尚在完善阶段，命令会加载旧数据后执行完整搜索，请关注后续版本更新。
 
@@ -93,12 +93,12 @@ python -m src.main search --config config/custom.yaml
 
 ## 📊 输出结果
 默认在 `resources/` 目录生成以下文件：
-- `cuda_hpc_resources.xlsx`：
+- `flash_attention_resources.xlsx`：
   - `所有资源`：完整结果集合（含质量分、推荐理由、搜索关键词等字段）。
   - `网站 / 博客 / 代码 / 论坛 / 课程笔记讲座 / 公开书籍 / 考试 / 技术白皮书`：按类型拆分的 Sheet，仅在该类别存在数据时生成。
   - `统计信息`：数量、语言分布、来源分布、评分统计等汇总指标。
   - `Top20资源`：按质量分倒序的前 20 个资源。
-- `cuda_hpc_resources.csv`：UTF-8（含 BOM）编码的备份文件，可在 Excel/Notebook 中直接打开。
+- `flash_attention_resources.csv`：UTF-8（含 BOM）编码的备份文件，可在 Excel/Notebook 中直接打开。
 
 ## 🔧 开发与扩展建议
 - ✅ 已实现自动去重、评分、推荐语生成逻辑。

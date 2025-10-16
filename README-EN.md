@@ -1,8 +1,8 @@
 [中文版本](README.md) | **English**
 
-# Automated Information Collection System (CUDA & HPC Resource Aggregator)
+# Automated Information Collection System (FlashAttention & Inference Acceleration Resources)
 
-The Automated Information Collection System is designed to batch discover, filter, and organize high-quality learning resources related to CUDA and high-performance computing (HPC). The project fetches candidate links from DuckDuckGo search results and trending repositories on GitHub, applies multi-dimensional scoring and classification strategies, and exports the final results as structured Excel/CSV files for convenient study and sharing.
+The Automated Information Collection System is designed to batch discover, filter, and organize high-quality resources focused on FlashAttention, DeepSeek Flash MLA, DeepGEMM, Deep EP, and other deep learning inference acceleration topics. The project fetches candidate links from DuckDuckGo search results and trending repositories on GitHub, applies multi-dimensional scoring and classification strategies, and exports the final results as structured Excel/CSV files for convenient study and sharing.
 
 ## ✨ Key Features
 - **Multi-source search**: Leverages both DuckDuckGo and the GitHub API, supporting extended keywords in Chinese and English.
@@ -72,7 +72,7 @@ Run the following commands from the project root:
   ```
   You can append extra English keywords with `--keywords`, for example:
   ```
-  python -m src.main search --keywords "GPU acceleration" "parallel training"
+  python -m src.main search --keywords "flash attention" "inference acceleration"
   ```
 
 - **View Excel statistics:**
@@ -82,7 +82,7 @@ Run the following commands from the project root:
 
 - **Attempt incremental updates (under development):**
   ```
-  python -m src.main update --file cuda_hpc_resources.xlsx
+  python -m src.main update --file flash_attention_resources.xlsx
   ```
   > Incremental merge logic is still evolving. The command loads the existing data and reruns a full search—watch for future updates.
 
@@ -93,12 +93,12 @@ python -m src.main search --config config/custom.yaml
 
 ## 📊 Output
 By default, the following files are generated under `resources/`:
-- `cuda_hpc_resources.xlsx`:
+- `flash_attention_resources.xlsx`:
   - `All Resources`: Complete result set (includes quality scores, recommendation notes, search keywords, etc.).
   - `Websites / Blogs / Code / Forums / Course Notes / Books / Exams / Technical Whitepapers`: Separate sheets generated only when the category contains data.
   - `Statistics`: Summary metrics such as counts, language distribution, source distribution, and score statistics.
   - `Top20 Resources`: The 20 highest-scoring resources in descending order.
-- `cuda_hpc_resources.csv`: UTF-8 (with BOM) encoded backup ready for Excel or notebooks.
+- `flash_attention_resources.csv`: UTF-8 (with BOM) encoded backup ready for Excel or notebooks.
 
 ## 🔧 Development Notes
 - ✅ Automatic deduplication, scoring, and recommendation generation are already implemented.

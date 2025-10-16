@@ -1,36 +1,27 @@
 # 自动化信息收集系统配置文件
-# CUDA & HPC资源收集器
+# FlashAttention & 深度推理资源收集器
 
 # 搜索配置
 search:
   # 中文搜索关键词
   keywords_zh:
-    - "CUDA编程教程"
-    - "CUDA编程入门"
-    - "高性能计算HPC"
-    - "CUDA优化技巧"
-    - "CUDA深度学习"
-    - "CUDA最佳实践"
-    - "高性能计算教程"
-    - "HPC集群搭建"
-    - "HPC任务调度"
-    - "高性能计算优化"
-    - "HPC性能调优"
+    - "FlashAttention 教程"
+    - "FlashAttention 实践"
+    - "DeepSeek Flash MLA"
+    - "DeepGEMM 优化"
+    - "DeepGEMM 教程"
+    - "Deep EP 推理"
+    - "DeepEP 优化"
 
   # 英文搜索关键词
   keywords_en:
-    - "CUDA programming tutorial"
-    - "CUDA getting started"
-    - "HPC high performance computing"
-    - "CUDA optimization guide"
-    - "CUDA deep learning"
-    - "CUDA best practices"
-    - "CUDA by example"
-    - "Professional CUDA C Programming"
-    - "high performance computing tutorial"
-    - "HPC cluster deployment"
-    - "HPC workload scheduling"
-    - "HPC performance tuning"
+    - "FlashAttention tutorial"
+    - "FlashAttention implementation"
+    - "DeepSeek Flash MLA"
+    - "DeepGEMM optimization"
+    - "DeepGEMM tutorial"
+    - "Deep EP inference"
+    - "DeepEP optimization"
 
   # 搜索源配置
   sources:
@@ -40,8 +31,8 @@ search:
 
     github:
       enabled: true
-      min_stars: 20      # 最小星标数
-      max_results: 20    # 每个关键词的最大结果数
+      min_stars: 10      # 最小星标数
+      max_results: 30    # 每个关键词的最大结果数
 
   # 搜索延迟（避免被封禁）
   delay_seconds: 1
@@ -49,7 +40,7 @@ search:
 # 输出配置
 output:
   path: "resources"                           # 输出目录
-  excel_file: "cuda_hpc_resources.xlsx"      # Excel文件名
+  excel_file: "flash_attention_resources.xlsx"      # Excel文件名
   csv_backup: true                           # 是否保存CSV备份
   auto_open: false                           # 是否自动打开结果文件
 
